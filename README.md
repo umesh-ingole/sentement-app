@@ -1,14 +1,14 @@
 # Sentiment Analysis API - Production Ready
 
-A **production-ready Flask API** for sentiment analysis using BERT model from HuggingFace. Classify text as Positive or Negative with confidence scores.
+A **production-ready Flask API** for sentiment analysis using BERT model. Classify text as Positive or Negative with confidence scores. Deploy to Render, Docker, or any cloud platform.
 
 ## 🚀 Features
 
-- ✅ **BERT Model** - Using `bert-base-uncased` from HuggingFace
-- ✅ **HuggingFace Dataset** - Trains on `sentiment140` dataset automatically
-- ✅ **JSON API** - Simple REST endpoints for predictions
-- ✅ **Production Ready** - Gunicorn server, health checks, error handling
-- ✅ **Docker Support** - Easy deployment to Hugging Face Spaces or cloud
+- ✅ **BERT Model** - `bert-base-uncased` with HuggingFace transformers
+- ✅ **HuggingFace Dataset** - Trains on `sentiment140` dataset  
+- ✅ **JSON API** - Clean REST endpoints for predictions
+- ✅ **Production Ready** - Gunicorn, health checks, error handling
+- ✅ **Docker Ready** - Deploy to Render, Hugging Face Spaces, AWS, etc.
 - ✅ **CPU Optimized** - Works on CPU-only environments
 - ✅ **Fast Inference** - ~100ms per prediction
 
@@ -18,18 +18,17 @@ A **production-ready Flask API** for sentiment analysis using BERT model from Hu
 
 ```
 sentiment-analysis/
-├── app_production.py          # Main Flask API
-├── train_production.py        # Model training script
-├── requirements_production.txt # Python dependencies
-├── Dockerfile                 # Docker configuration
-├── .gitignore                # Git ignore patterns
-├── .dockerignore             # Docker ignore patterns
-├── bert_model/               # Trained BERT model (generated)
-│   ├── config.json
-│   ├── pytorch_model.bin
-│   ├── tokenizer_config.json
-│   └── vocab.txt
-└── README.md                 # This file
+├── app_production.py              # Flask API (main)
+├── train_production.py            # Model training script
+├── requirements_production.txt     # Dependencies
+├── Dockerfile                     # Docker config
+├── docker-compose.yml             # Docker Compose
+├── README.md                      # This file
+├── RENDER_DEPLOYMENT.md           # Render guide
+├── test_api.py                    # Test suite
+├── bert_model/                    # Trained model (generated)
+├── templates/index.html           # Web UI (optional)
+└── .gitignore, .dockerignore      # Config files
 ```
 
 ---

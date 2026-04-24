@@ -24,7 +24,7 @@ RUN pip install --upgrade pip setuptools wheel && \
 
 # Copy application files
 COPY app_production.py .
-COPY train_sentiment_model.py .
+COPY train_production.py .
 COPY templates/ templates/
 
 # Create bert_model directory (will be mounted or pre-built)
