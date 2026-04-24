@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: sentiment-analysis-api
+    env: docker
+    dockerfilePath: ./Dockerfile
+    region: oregon
+    plan: free
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: PYTHONUNBUFFERED
+        value: "1"
+    healthCheckPath: /health
+    ports:
+      - port: 5000
+        protocol: HTTP

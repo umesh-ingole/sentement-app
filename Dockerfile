@@ -1,41 +1,44 @@
-# Use Python 3.9 slim image
+# Production-optimized Dockerfile for Render
+# Use Python 3.9 slim image (smaller and faster)
 FROM python:3.9-slim
 
 # Set working directory
 WORKDIR /app
 
-# Set environment variables
+# Set environment variables for production
 ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
     PIP_NO_CACHE_DIR=1 \
-    FLASK_APP=app_production.py
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    FLASK_APP=app_production.py \
+    FLASK_ENV=production
 
-# Install system dependencies
+# Install system dependencies (minimal)
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements file
+# Copy requirements first (better layer caching)
 COPY requirements_production.txt .
 
-# Install Python dependencies
+# Upgrade pip and install Python dependencies
 RUN pip install --upgrade pip setuptools wheel && \
-    pip install -r requirements_production.txt
+    pip install --no-cache-dir -r requirements_production.txt
 
 # Copy application files
 COPY app_production.py .
 COPY train_production.py .
 COPY templates/ templates/
 
-# Create bert_model directory (will be mounted or pre-built)
+# Create model directory
 RUN mkdir -p bert_model
 
-# Expose port
+# Expose port (required by Render)
 EXPOSE 5000
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+# Health check (Render uses this)
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
     CMD curl -f http://localhost:5000/health || exit 1
 
-# Run with gunicorn for production
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "4", "--worker-class", "sync", "--timeout", "120", "app_production:app"]
+# Run application with gunicorn
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "2", "--worker-class", "sync", "--timeout", "120", "--access-logfile", "-", "--error-logfile", "-", "app_production:app"]
